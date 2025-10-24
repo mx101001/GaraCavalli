@@ -25,7 +25,8 @@ public class Main {
             try {
                 cavallo.join();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                System.out.println("stacktrace:\n");
+                        e.printStackTrace();
             }
         });
 

@@ -33,7 +33,7 @@ public class Cavallo extends Thread {
     }
 
     public void azzoppa(){
-        double rand = Math.random() * 5;
+        double rand = Math.random();
         int rundem = (int)rand;
         if(rundem % 3 == 1){
             this.interrupt();
