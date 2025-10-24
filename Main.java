@@ -10,32 +10,24 @@ public class Main {
         int percorso = tastiera.nextInt();
 
         
-        List<String> classifica = new ArrayList<>();
+        ArrayList<String> classifica = new ArrayList<String>();
+        ArrayList<Cavallo> cavalli = new ArrayList<Cavallo>();
 
-       
-        Cavallo c1 = new Cavallo("cavallo1", percorso, classifica);
-        Cavallo c2 = new Cavallo("cavallo2", percorso, classifica);
-        Cavallo c3 = new Cavallo("cavallo3", percorso, classifica);
-        Cavallo c4 = new Cavallo("cavallo4", percorso, classifica);
-        Cavallo c5 = new Cavallo("cavallo5", percorso, classifica);
-
-       
-        c1.start();
-        c2.start();
-        c3.start();
-        c4.start();
-        c5.start();
-
-       
-        try {
-            c1.join();
-            c2.join();
-            c3.join();
-            c4.join();
-            c5.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for(int i = 0;i<5;i++){
+            cavalli.add(new Cavallo("cavallo"+i,percorso,classifica));
         }
+
+        cavalli.forEach(cavallo -> {
+            cavallo.run();
+        });
+
+        cavalli.forEach(cavallo -> {
+            try {
+                cavallo.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
        
         System.out.println("\n CLASSIFICA ");
