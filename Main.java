@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,14 +10,17 @@ public class Main {
         
         ArrayList<String> classifica = new ArrayList<String>();
         ArrayList<Cavallo> cavalli = new ArrayList<Cavallo>();
-
+        int j = 0 ;
         for(int i = 0;i<5;i++){
-            cavalli.add(new Cavallo("cavallo"+i,percorso,classifica));
+            j = i+1;
+            cavalli.add(new Cavallo("cavallo"+j,percorso,classifica));
         }
 
         cavalli.forEach(cavallo -> {
             cavallo.run();
         });
+
+        cavalli.get((int)(Math.random() * cavalli.size()-1)).interrupt();
 
         cavalli.forEach(cavallo -> {
             try {

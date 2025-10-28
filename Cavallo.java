@@ -1,14 +1,12 @@
-import java.util.List;
-import java.math.*;
+import java.util.*;
 
 public class Cavallo extends Thread {
     private final String nome;
     private final int distanza;
     private int metriPercorsi = 0;
-    private final int passo = 5; 
-    private final List<String> classifica;
+    private final ArrayList<String> classifica;
 
-    public Cavallo(String nome, int distanza, List<String> classifica) {
+    public Cavallo(String nome, int distanza, ArrayList<String> classifica) {
         this.nome = nome;
         this.distanza = distanza;
         this.classifica = classifica;
@@ -16,27 +14,20 @@ public class Cavallo extends Thread {
 
     @Override
     public void run() {
-        setName(nome); 
-
+        setName(nome);
         while (metriPercorsi < distanza) {
-            metriPercorsi += passo;
+            if(this.isInterrupted()){
+                break;
+            }
+            metriPercorsi += (int)(Math.random() * 10 ) + 1;
             System.out.println(nome + " ha percorso " + metriPercorsi + " metri");
 
             if (metriPercorsi >= distanza) {
                 synchronized (classifica) {
                     classifica.add(nome);
                 }
-                System.out.println(nome + " ha tagliato il traguardo!");
+                System.out.println(nome + " ha tagliato il traguardo! in ");
             }
-            azzoppa();
-        }
-    }
-
-    public void azzoppa(){
-        double rand = Math.random() * 5;
-        int rundem = (int)rand;
-        if(rundem % 3 == 1){
-            this.interrupt();
         }
     }
 }
