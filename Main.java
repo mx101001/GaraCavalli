@@ -1,9 +1,10 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner tastiera = new Scanner(System.in);
-
+        String BufferFile = new String();
         System.out.println("Inserisci la lunghezza del percorso (in metri): ");
         int percorso = tastiera.nextInt();
 
@@ -20,7 +21,8 @@ public class Main {
             cavallo.run();
         });
 
-        cavalli.get((int)(Math.random() * cavalli.size()-1)).interrupt();
+
+        cavalli.get((int)(Math.random() * cavalli.size())).interrupt();
 
         cavalli.forEach(cavallo -> {
             try {
@@ -36,5 +38,9 @@ public class Main {
         for (int i = 0; i < classifica.size(); i++) {
             System.out.println((i + 1) + "° posto: " + classifica.get(i));
         }
+
+
+
+
     }
 }
