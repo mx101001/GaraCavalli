@@ -1,55 +1,62 @@
-import java.io.*;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
-public class Cavallo extends Thread {
-    private final String nome;
-    private final int distanza;
+public class Cavallo extends Thread{
+    private final String Nome;
+    private final int Passo;
+    private int distanza;
+    private final CountDownLatch startSignal;
+    //----------------------------//
     private int metriPercorsi = 0;
-    private final ArrayList<String> classifica;
-
-    public Cavallo(String nome, int distanza, ArrayList<String> classifica) {
-        this.nome = nome;
-        this.distanza = distanza;
-        this.classifica = classifica;
+    //----------------------------//
+    public Cavallo(String nome, int PercorsoLength,CountDownLatch startSignal){
+        this.Nome = nome;
+        this.Passo = (int)(Math.random() * 10) +1 ;
+        this.distanza = PercorsoLength;
+        this.startSignal = startSignal;
+        System.out.println(this.Nome+" corre con un passo di:"+this.Passo+"m");
     }
 
     @Override
-    public void run() {
-        String Buffer = new String();
-        setName(nome);
-        while (metriPercorsi < distanza) {
-            if(this.isInterrupted()){
-                Buffer += nome+" è stato azzoppato";
-                break;
-            }
-            metriPercorsi += (int)(Math.random() * 10 ) + 1;
-            Buffer += nome + " ha percorso " + metriPercorsi + " metri"+ "\n";
-            System.out.println(nome + " ha percorso " + metriPercorsi + " metri");
-
-            if (metriPercorsi >= distanza) {
-                synchronized (classifica) {
-                    classifica.add(nome);
-                }
-                Buffer += nome +"ha tagliato il traguardo"+ "\n";
-                System.out.println(nome + " ha tagliato il traguardo! in ");
-            }
-            try {
-                sleep((int)(Math.random() * 100));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+    public void run(){
+        setName(Nome);
+        if(this.isInterrupted()){
+            return;
+        }
+        try {
+            startSignal.await();
+        while (!this.isInterrupted()){
+            if(distanza <= 0){
+                Main.AddToClassifica(this.Nome);
+                return;
+            }else{
+                distanza -= Passo;
             }
         }
-        WriteHistoryToFile(Buffer);
-    }
-
-    public void WriteHistoryToFile(String S){
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("log.txt"));
-            writer.write(S);
-            writer.close();
-        }catch (IOException e ){
-            System.out.println("Errore Input Output");
+        }catch (InterruptedException e){
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public String GetNome(){
+        return this.Nome;
+    }
+
 }
