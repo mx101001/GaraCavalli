@@ -1,44 +1,52 @@
 import java.util.concurrent.CountDownLatch;
 
 public class Cavallo extends Thread {
-    private final String Nome;
-    private final int Passo;
-    private int distanza;
+    private final String nome;
+    private final int passo;
+    private volatile int distanza;
     private final CountDownLatch startSignal;
 
-    public Cavallo(String nome, int PercorsoLength, CountDownLatch startSignal) {
-        this.Nome = nome;
-        this.Passo = (int) (Math.random() * 10) + 1;
-        this.distanza = PercorsoLength;
+    public Cavallo(String nome, int percorsoLength, CountDownLatch startSignal) {
+        this.nome = nome;
+        this.passo = (int) (Math.random() * 10) + 1;
+        this.distanza = percorsoLength;
         this.startSignal = startSignal;
-        System.out.println(this.Nome + " corre con un passo di:" + this.Passo + "m");
+        System.out.println(this.nome + " corre con un passo di: " + this.passo + "m");
     }
 
     @Override
     public void run() {
-        setName(Nome);
-
+        setName(nome);
         try {
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println(this.Nome + " è stato azzoppato prima della partenza.");
-                return;
-            }
-
+            
             startSignal.await();
-
             while (distanza > 0 && !Thread.currentThread().isInterrupted()) {
                 Thread.sleep(100);
-                distanza -= Passo;
+                distanza -= passo;
+                
+              
             }
-
-            if (Thread.currentThread().isInterrupted()) {
-                System.out.println(this.Nome + " è stato azzoppato durante la corsa.");
-            } else if (distanza <= 0) {
-                Main.AddToClassifica(this.Nome);
+            
+           
+            if (!Thread.currentThread().isInterrupted() && distanza <= 0) {
+                System.out.println(nome + " ha tagliato il traguardo!");
+                Main.AddToClassifica(nome);
+            } else {
+                System.out.println(nome + " è stato azzoppato durante la corsa.");
             }
+            
         } catch (InterruptedException e) {
-            System.out.println(this.Nome + " è stato azzoppato (interrotto durante l'attesa o la corsa).");
-            Thread.currentThread().interrupt();
+            System.out.println(nome + " è stato azzoppato (interrotto).");
+            Thread.currentThread().interrupt(); 
         }
+    }
+    
+    
+    public int getDistanza() {
+        return distanza;
+    }
+    
+    public String getNomeCavallo() {
+        return nome;
     }
 }
