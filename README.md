@@ -57,17 +57,10 @@ Il progetto è composto da due classi principali:
 
 Al termine della corsa, troverai un file chiamato **`classifica.txt`** nella directory del progetto contenente tutti i log della simulazione e la classifica finale.
 
-## 🤝 Contributi
-
-Sentiti libero di aprire issue o inviare Pull Request per migliorare la simulazione, ad esempio aggiungendo:
-* Una GUI per la visualizzazione in tempo reale.
-* Una logica di "passo" più complessa.
-* Gestione dei thread tramite `ExecutorService`.
-
 ## 📧 Contatti
 
 Per qualsiasi domanda o suggerimento sul progetto, puoi contattare l'autore su GitHub:
-* **Autore:** [Filippo Berti] (il nome è preso dai commenti in `Cavallo.java`)
+* **Autore:** [Dario Mongardini,Filippo Berti] (il nome è preso dai commenti in `Cavallo.java`)
 * **Profilo GitHub:** [https://github.com/mx101001](https://github.com/mx101001)
 
 ---
