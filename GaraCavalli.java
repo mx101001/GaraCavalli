@@ -1,3 +1,6 @@
+import components.FileChooser;
+
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -23,17 +26,23 @@ public class GaraCavalli {
     private static final List<String> classifica = new CopyOnWriteArrayList<>();
     /** Buffer che accumula l'output destinato anche al file di risultato. */
     private static final StringBuilder bufferFile = new StringBuilder();
-    
+    private static File OutputFile;
+
     /**
+     * Metodo per aggiungere un cavallo
+     * @param nome nome del cavallo da aggiungere alla Lista classifica
      * Aggiunge un nome alla classifica (usato dai cavalli quando tagliano il traguardo).
      *
      * @param nome nome del cavallo che ha tagliato il traguardo
      */
     public static void addToClassifica(String nome) {
         classifica.add(nome);
+
     }
-    
+
     /**
+     * Metodo della classe GaraCavalli che serve a stampare e salvare i log sullo String Builder
+     * @param message La stringa che deve essere stampata e salvata sul buffer
      * Stampa un messaggio su console e lo memorizza nel buffer destinato al file.
      *
      * @param message messaggio da loggare
@@ -50,7 +59,7 @@ public class GaraCavalli {
      */
     public static void main(String[] args) {
         Scanner tastiera = new Scanner(System.in);
-        
+        createAndShowGUI();
         log("=== GARA DI CAVALLI ===");
         System.out.print("Inserisci la lunghezza del percorso (in metri): ");
         int percorso = tastiera.nextInt();
@@ -110,10 +119,31 @@ public class GaraCavalli {
      * In caso di errore di I/O, scrive un messaggio su stderr.
      */
     private static void salvaRisultati() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("classifica.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(OutputFile))) {
             writer.write(bufferFile.toString());
         } catch (IOException e) {
             System.err.println("Errore nella scrittura del file: " + e.getMessage());
         }
     }
+
+    private static void createAndShowGUI() {
+        JFrame frame = new JFrame("FileChooserDemo");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        FileChooser fileChooserComponent = new FileChooser();
+
+        fileChooserComponent.setFileSelectedCallback(selectedFile -> {
+            OutputFile = selectedFile;
+
+            // Esempio: chiudo la finestra una volta che ho il file
+            JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(fileChooserComponent);
+            if (parent != null) {
+                parent.dispose();
+            }
+        });
+        frame.add(fileChooserComponent);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
 }
